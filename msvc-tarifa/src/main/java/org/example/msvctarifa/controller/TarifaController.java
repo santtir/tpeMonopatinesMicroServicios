@@ -48,9 +48,10 @@ public class TarifaController {
         return ResponseEntity.of(service.vigente());
     }
 
-    // endpoint interno para msvc-viaje
     @PostMapping("/calcular")
-    public CalcularCostoResponse calcular(@RequestBody CalcularCostoRequest req) {
-        return service.calcular(req);
+    public CalcularCostoResponse calcular(@RequestParam(required = false) Instant at,
+                                          @RequestBody CalcularCostoRequest req){
+        return service.calcular(req, at == null ? Instant.now() : at);
     }
+
 }

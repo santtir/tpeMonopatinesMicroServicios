@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TopUsuariosRepo extends MongoRepository<TopUsuarios, String> {
     List<TopUsuarios> findByPeriodo(String periodo);
+
 }

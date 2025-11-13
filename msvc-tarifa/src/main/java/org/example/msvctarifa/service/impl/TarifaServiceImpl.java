@@ -39,8 +39,8 @@ public class TarifaServiceImpl implements TarifaService {
     }
 
     @Override
-    public CalcularCostoResponse calcular(CalcularCostoRequest req) {
-        Tarifa t = vigente().orElseThrow(() -> new IllegalStateException("No hay tarifa vigente"));
+    public CalcularCostoResponse calcular(CalcularCostoRequest req, Instant at) {
+        var t = repo.findVigente(at).orElseThrow(() -> new IllegalStateException("No hay tarifa vigente"));
         int costoMin = req.minutos() * t.getPrecioMinuto();
         int minutosP = Math.min(req.minutosPausa(), t.getMaxMinsPausa());
         int costoPausa = minutosP * t.getPrecioMinPausa();
@@ -49,4 +49,5 @@ public class TarifaServiceImpl implements TarifaService {
         int total = costoMin + costoPausa + costoKm + recargo;
         return new CalcularCostoResponse(total, costoMin, costoPausa, costoKm, recargo);
     }
+
 }

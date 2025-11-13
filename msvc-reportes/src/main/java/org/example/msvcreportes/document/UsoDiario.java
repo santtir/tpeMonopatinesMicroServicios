@@ -11,6 +11,7 @@ public class UsoDiario {
     @Id private String id;
     private LocalDate fecha;
     private Long monopatinId;
+    private Long usuarioId;
     private int viajes;        // cantidad
     private double km;         // totales
     private int min;           // minutos en movimiento
