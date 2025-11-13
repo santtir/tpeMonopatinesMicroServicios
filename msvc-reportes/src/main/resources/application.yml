@@ -1,0 +1,12 @@
+server:
+  port: 8087
+
+spring:
+  profiles:
+    active: docker
+---
+spring:
+  config.activate.on-profile: docker
+  data:
+    mongodb:
+      uri: mongodb://mongo:27017/reportes

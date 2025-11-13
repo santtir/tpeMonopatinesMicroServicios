@@ -1,0 +1,27 @@
+server:
+  port: 8081
+spring:
+  profiles:
+    active: docker
+
+---
+spring:
+  config.activate.on-profile: docker
+  datasource:
+    url: jdbc:mysql://mysql:3306/viajes?serverTimezone=UTC&useSSL=false
+    username: root
+    password: admin123
+  jpa:
+    hibernate.ddl-auto: update
+    open-in-view: false
+
+---
+spring:
+  config.activate.on-profile: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/viajes?serverTimezone=UTC&useSSL=false
+    username: root
+    password: admin123
+  jpa:
+    hibernate.ddl-auto: update
+    open-in-view: false

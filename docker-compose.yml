@@ -1,0 +1,107 @@
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -uroot -padmin123 --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  viajes:
+    image: msvc-viaje:latest
+    build:
+      context: .                  # raiz del repo
+      dockerfile: msvc-viaje/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  monopatin:
+    image: msvc-monopatin:latest
+    build:
+      context: .
+      dockerfile: msvc-monopatin/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  parada:
+    image: msvc-parada:latest
+    build:
+      context: .
+      dockerfile: msvc-parada/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+
+  tarifa:
+    image: msvc-tarifa:latest
+    build:
+      context: .
+      dockerfile: msvc-tarifa/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  cuenta:
+    image: msvc-cuenta:latest
+    build:
+      context: .
+      dockerfile: msvc-cuenta/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8085:8085"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  facturacion:
+    image: msvc-facturacion:latest
+    build:
+      context: .
+      dockerfile: msvc-facturacion/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8086:8086"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+
+
+volumes:
+  mysql_data:
+  mongo_data:

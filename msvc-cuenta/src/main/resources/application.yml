@@ -1,0 +1,15 @@
+server:
+  port: 8085
+spring:
+  profiles:
+    active: docker
+---
+spring:
+  config.activate.on-profile: docker
+  datasource:
+    url: jdbc:mysql://mysql:3306/cuentas?serverTimezone=UTC&useSSL=false
+    username: root
+    password: admin123
+  jpa:
+    hibernate.ddl-auto: update
+    open-in-view: false
